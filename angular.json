@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "firstProject": {
+    "ConferenceList": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "firstProject:build:production"
+              "buildTarget": "ConferenceList:build:production"
             },
             "development": {
-              "buildTarget": "firstProject:build:development"
+              "buildTarget": "ConferenceList:build:development"
             }
           },
           "defaultConfiguration": "development"

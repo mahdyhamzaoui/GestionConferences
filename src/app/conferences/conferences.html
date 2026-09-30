@@ -1,0 +1,22 @@
+<div class="conferences-page-container">
+  <header class="page-intro">
+    <h1 class="page-title">Programme des Conférences</h1>
+  </header>
+
+  <div class="conferences-grid">
+    <div class="list-column">
+      <app-conference-list
+        [conferences]="conferences()"
+        [selectedConference]="selectedConference()"
+        (conferenceSelected)="selectConference($event)"
+      ></app-conference-list>
+    </div>
+
+    <div class="details-column">
+      <app-conference-details
+        [conf]="selectedConference()"
+        (registered)="onRegister($event)"
+      ></app-conference-details>
+    </div>
+  </div>
+</div>

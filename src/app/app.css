@@ -1,0 +1,15 @@
+app-header {
+  display: block;
+  background-color: #ffffff;
+  height: 64px;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+app-home {
+  display: block;
+  background-color: #f8fafc;
+  min-height: calc(100vh - 128px);
+}
