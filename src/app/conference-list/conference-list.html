@@ -1,44 +1,38 @@
-<div class="list-card-wrapper">
-  <div class="list-header">
-    <div class="title-with-badge">
-      <h2 class="list-title">Conférences</h2>
-      <span class="count-badge">{{ conferences().length }}</span>
+<div class="conferences-container">
+  <div class="list-card-wrapper">
+    <div class="list-header">
+      <div class="title-with-badge">
+        <h2 class="list-title">Conférences</h2>
+        <span class="count-badge">{{ conferences().length }}</span>
+      </div>
     </div>
-    <p class="list-subtitle">Sélectionnez un événement</p>
-  </div>
 
-  <div class="cards-list">
-    @for (conf of conferences(); track conf.id) {
-      <article
-        class="conf-item"
-        [class.selected]="selectedConference()?.id == conf.id"
-        (click)="selectConference(conf)"
-      >
-        <div class="item-top">
-          <span class="category-pill">{{ conf.category }}</span>
-          <span class="date-tag">{{ conf.date }}</span>
-        </div>
+    <div class="cards-list">
+      @for (conf of conferences(); track conf.id) {
+        <article
+          class="conf-item"
+          [routerLink]="['/conferences', conf.id]"
+        >
+          <div class="item-top">
+            <span class="category-pill">{{ conf.category }}</span>
+            <span class="date-tag">📅 {{ conf.date }}</span>
+          </div>
 
-        <h3 class="conf-name">{{ conf.name }}</h3>
+          <h3 class="conf-name">{{ conf.name }}</h3>
 
-        <div class="item-meta">
-          <span class="meta-info">{{ conf.place }}</span>
-          <span class="meta-info">{{ conf.speaker }}</span>
-        </div>
+          <div class="item-meta">
+            <span class="meta-info">📍 {{ conf.place }}</span>
+            <span class="meta-info">🎤 {{ conf.speaker }}</span>
+          </div>
 
-        <div class="item-footer">
-          <span class="seats-info">
-            <strong>{{ conf.availableSeats }}</strong> places restantes
-          </span>
-          <span class="action-hint">
-            @if (selectedConference()?.id == conf.id) {
-              <span class="active-badge">Séléctionnée</span>
-            } @else {
-              <span class="select-hint">Voir détails</span>
-            }
-          </span>
-        </div>
-      </article>
-    }
+          <div class="item-footer">
+            <span class="seats-info">
+              🎟️ <strong>{{ conf.availableSeats }}</strong> places restantes
+            </span>
+            <a [routerLink]="['/conferences', conf.id]" class="select-hint">Voir détails</a>
+          </div>
+        </article>
+      }
+    </div>
   </div>
 </div>

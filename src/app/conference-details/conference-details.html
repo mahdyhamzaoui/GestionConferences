@@ -1,58 +1,63 @@
-<div class="details-card-wrapper">
-  @if (conf()) {
-    <div class="details-content">
-      <div class="details-badge-row">
-        <span class="category-badge">{{ conf().category }}</span>
-        @if (conf().availableSeats > 0) {
-          <span class="status-badge open">Inscription Ouverte</span>
-        } @else {
-          <span class="status-badge closed">Complet</span>
-        }
+<div class="details-page-container">
+  <div class="details-card-wrapper">
+    @if (conf()) {
+      <div class="details-content">
+        <div class="details-badge-row">
+          <span class="category-badge">{{ conf().category }}</span>
+          @if (conf().availableSeats > 0) {
+            <span class="status-badge open">Inscription Ouverte</span>
+          } @else {
+            <span class="status-badge closed">Complet</span>
+          }
+        </div>
+
+        <h2 class="conference-title">{{ conf().name }}</h2>
+
+        <div class="info-grid">
+          <div class="info-cell">
+            <span class="cell-label">📅 Date</span>
+            <span class="cell-value">{{ conf().date }}</span>
+          </div>
+
+          <div class="info-cell">
+            <span class="cell-label">📍 Lieu</span>
+            <span class="cell-value">{{ conf().place }}</span>
+          </div>
+
+          <div class="info-cell">
+            <span class="cell-label">🎤 Conférencier</span>
+            <span class="cell-value">{{ conf().speaker }}</span>
+          </div>
+
+          <div class="info-cell">
+            <span class="cell-label">🎟️ Disponibilité</span>
+            <span class="cell-value">
+              {{ conf().availableSeats }} places restantes
+            </span>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button
+            class="btn-register"
+            type="button"
+            [disabled]="conf().availableSeats <= 0"
+            (click)="onReserve()"
+          >
+            Réserver ma place
+          </button>
+        </div>
       </div>
-
-      <h2 class="conference-title">{{ conf().name }}</h2>
-
-      <div class="info-grid">
-        <div class="info-cell">
-          <span class="cell-label">Date</span>
-          <span class="cell-value">{{ conf().date }}</span>
-        </div>
-
-        <div class="info-cell">
-          <span class="cell-label">Lieu</span>
-          <span class="cell-value">{{ conf().place }}</span>
-        </div>
-
-        <div class="info-cell">
-          <span class="cell-label">Conférencier</span>
-          <span class="cell-value">{{ conf().speaker }}</span>
-        </div>
-
-        <div class="info-cell">
-          <span class="cell-label">Disponibilité</span>
-          <span class="cell-value">
-            {{ conf().availableSeats }} places restantes
-          </span>
-        </div>
+    } @else {
+      <div class="empty-state">
+        <h3 class="empty-title">Conférence introuvable</h3>
+        <p class="empty-desc">
+          Aucune conférence ne correspond à cet identifiant.
+        </p>
+        <a routerLink="/conferences" class="btn-primary-link">
+          Retour à la liste des conférences
+        </a>
       </div>
-
-      <div class="action-row">
-        <button
-          class="btn-register"
-          type="button"
-          [disabled]="conf().availableSeats <= 0"
-          (click)="onRegister()"
-        >
-          Réserver ma place
-        </button>
-      </div>
-    </div>
-  } @else {
-    <div class="empty-state">
-      <h3 class="empty-title">Aucune conférence sélectionnée</h3>
-      <p class="empty-desc">
-        Cliquez sur l'une des conférences dans la liste pour consulter les détails et réserver votre place.
-      </p>
-    </div>
-  }
+    }
+  </div>
 </div>

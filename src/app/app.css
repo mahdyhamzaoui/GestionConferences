@@ -8,8 +8,9 @@ app-header {
   z-index: 50;
 }
 
-app-home {
+app-home,
+app-conference-list,
+app-conference-details {
   display: block;
-  background-color: #f8fafc;
-  min-height: calc(100vh - 128px);
+  min-height: calc(100vh - 64px);
 }
