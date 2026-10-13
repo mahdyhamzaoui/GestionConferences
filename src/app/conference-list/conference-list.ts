@@ -11,6 +11,5 @@ import { ConferenceService } from '../conference.service';
 export class ConferenceList {
   private conferenceService = inject(ConferenceService);
 
-  // liste des conférences à partir du service
   conferences = this.conferenceService.conferences;
 }

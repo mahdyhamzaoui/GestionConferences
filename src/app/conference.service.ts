@@ -4,7 +4,6 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class ConferenceService {
-  // liste des conférences
   conferences = signal<any[]>([
     {
       id: 1,
@@ -35,19 +34,17 @@ export class ConferenceService {
     },
   ]);
 
-  // récupérer une conférence par son id
-  getConferenceById(id: number): any {
+  getConferenceById(id: string): any {
     return this.conferences().find((c) => c.id == id);
   }
 
-  // réserver une place
-  reserveSeat(id: number): void {
-    this.conferences.update((list) =>
-      list.map((c) =>
-        c.id == id && c.availableSeats > 0
-          ? { ...c, availableSeats: c.availableSeats - 1 }
-          : c
-      )
-    );
+  reserve(id: number): void {
+    this.conferences.update((conferences) => {
+      const conf = conferences.find((c) => c.id === id);
+      if (conf && conf.availableSeats > 0) {
+        conf.availableSeats--;
+      }
+      return [...conferences]; // nouvelle liste aprés le changement
+    });
   }
 }
