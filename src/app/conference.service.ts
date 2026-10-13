@@ -44,7 +44,7 @@ export class ConferenceService {
       if (conf && conf.availableSeats > 0) {
         conf.availableSeats--;
       }
-      return [...conferences]; // nouvelle liste aprés le changement
+      return [...conferences];
     });
   }
 }
