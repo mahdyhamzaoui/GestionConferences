@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ConferenceService } from '../conference.service';
+import { ConferenceService } from '../services/conference.service';
 
 @Component({
   selector: 'app-conference-list',

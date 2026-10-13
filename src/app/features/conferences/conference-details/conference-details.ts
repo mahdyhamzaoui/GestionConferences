@@ -1,6 +1,6 @@
 import { Component, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ConferenceService } from '../conference.service';
+import { ConferenceService } from '../services/conference.service';
 
 @Component({
   selector: 'app-conference-details',
@@ -12,7 +12,7 @@ export class ConferenceDetails implements OnInit {
   conf = signal<any>(null);
   id = input.required<string>();
 
-  constructor(private conferenceService: ConferenceService) {}
+  constructor(private conferenceService: ConferenceService) { }
 
   ngOnInit(): void {
     this.conf.set(this.conferenceService.getConferenceById(this.id()));
