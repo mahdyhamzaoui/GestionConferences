@@ -1,0 +1,32 @@
+{
+  "conferences": [
+    {
+      "id": "1",
+      "name": "Angular Innovations",
+      "place": "Tunis",
+      "date": "2026-10-15",
+      "speaker": "Ing. Sarra Ben Ali",
+      "category": "Architecture Web",
+      "availableSeats": 9
+    },
+    {
+      "id": "2",
+      "name": "AI & Data Science",
+      "place": "Sousse",
+      "date": "2026-10-22",
+      "speaker": "Ing. Karim Trabelsi",
+      "category": "Intelligence Artificielle",
+      "availableSeats": 0
+    },
+    {
+      "id": "3",
+      "name": "Cloud & DevOps",
+      "place": "Sfax",
+      "date": "2026-11-05",
+      "speaker": "Ing. Youssef Mansour",
+      "category": "Cloud & Infrastructure",
+      "availableSeats": 5
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

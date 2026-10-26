@@ -1,50 +1,32 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Conference } from '../models/conference';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConferenceService {
-  conferences = signal<any[]>([
-    {
-      id: 1,
-      name: 'Angular Innovations',
-      place: 'Tunis',
-      date: '2026-10-15',
-      speaker: 'Ing. Sarra Ben Ali',
-      category: 'Architecture Web',
-      availableSeats: 10,
-    },
-    {
-      id: 2,
-      name: 'AI & Data Science',
-      place: 'Sousse',
-      date: '2026-10-22',
-      speaker: 'Ing. Karim Trabelsi',
-      category: 'Intelligence Artificielle',
-      availableSeats: 0,
-    },
-    {
-      id: 3,
-      name: 'Cloud & DevOps',
-      place: 'Sfax',
-      date: '2026-11-05',
-      speaker: 'Ing. Youssef Mansour',
-      category: 'Cloud & Infrastructure',
-      availableSeats: 5,
-    },
-  ]);
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:3000/conferences';
 
-  getConferenceById(id: string): any {
-    return this.conferences().find((c) => c.id == id);
+  get(): Observable<Conference[]> {
+    return this.http.get<Conference[]>(this.apiUrl);
   }
 
-  reserve(id: number): void {
-    this.conferences.update((conferences) => {
-      const conf = conferences.find((c) => c.id === id);
-      if (conf && conf.availableSeats > 0) {
-        conf.availableSeats--;
-      }
-      return [...conferences];
-    });
+  getById(id: number): Observable<Conference> {
+    return this.http.get<Conference>(`${this.apiUrl}/${id}`);
+  }
+
+  add(conference: Conference): Observable<Conference> {
+    return this.http.post<Conference>(this.apiUrl, conference);
+  }
+
+  update(conference: Conference): Observable<Conference> {
+    return this.http.put<Conference>(`${this.apiUrl}/${conference.id}`, conference);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

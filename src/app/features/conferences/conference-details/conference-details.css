@@ -38,6 +38,7 @@
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
+  text-decoration: none;
 }
 
 .btn-back:hover {
@@ -49,14 +50,15 @@
 .details-card-wrapper {
   max-width: 800px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-radius: 20px;
   padding: 36px;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-sizing: border-box;
+  position: relative;
 }
 
 .details-badge-row {
@@ -132,11 +134,59 @@
   font-weight: 600;
 }
 
+.text-danger {
+  color: #dc2626 !important;
+}
+
 .action-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 20px;
   border-top: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.secondary-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit {
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-edit:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-delete {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-delete:hover {
+  background: #ef4444;
+  color: #ffffff;
 }
 
 .btn-register {
@@ -165,10 +215,14 @@
   box-shadow: none;
 }
 
-/* Empty State */
 .empty-state {
   text-align: center;
   padding: 48px 20px;
+}
+
+.empty-icon {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
 }
 
 .empty-title {
@@ -203,7 +257,21 @@
 }
 
 @media (max-width: 640px) {
+  .details-card-wrapper {
+    padding: 20px;
+  }
   .info-grid {
     grid-template-columns: 1fr;
+  }
+  .action-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .secondary-actions {
+    justify-content: space-between;
+  }
+  .btn-register {
+    width: 100%;
+    text-align: center;
   }
 }

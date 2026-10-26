@@ -1,58 +1,101 @@
 <div class="details-page-container">
+  <div class="page-top-actions">
+    <a routerLink="/conferences" class="btn-back">
+      ← Retour aux conférences
+    </a>
+  </div>
+
   <div class="details-card-wrapper">
-    @if (conf()) {
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        <span class="alert-icon">✓</span>
+        <span>{{ successMessage() }}</span>
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger">
+        <span class="alert-icon">⚠️</span>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Chargement des détails de la conférence...</p>
+      </div>
+    } @else if (conf()) {
       <div class="details-content">
         <div class="details-badge-row">
-          <span class="category-badge">{{ conf().category }}</span>
-          @if (conf().availableSeats > 0) {
+          <span class="category-badge">{{ conf()!.category }}</span>
+          @if (conf()!.availableSeats > 0) {
             <span class="status-badge open">Inscription Ouverte</span>
           } @else {
             <span class="status-badge closed">Complet</span>
           }
         </div>
 
-        <h2 class="conference-title">{{ conf().name }}</h2>
+        <h2 class="conference-title">{{ conf()!.name }}</h2>
 
         <div class="info-grid">
           <div class="info-cell">
             <span class="cell-label">📅 Date</span>
-            <span class="cell-value">{{ conf().date }}</span>
+            <span class="cell-value">{{ conf()!.date }}</span>
           </div>
 
           <div class="info-cell">
             <span class="cell-label">📍 Lieu</span>
-            <span class="cell-value">{{ conf().place }}</span>
+            <span class="cell-value">{{ conf()!.place }}</span>
           </div>
 
           <div class="info-cell">
             <span class="cell-label">🎤 Conférencier</span>
-            <span class="cell-value">{{ conf().speaker }}</span>
+            <span class="cell-value">{{ conf()!.speaker }}</span>
           </div>
 
           <div class="info-cell">
             <span class="cell-label">🎟️ Disponibilité</span>
-            <span class="cell-value">
-              {{ conf().availableSeats }} places restantes
+            <span class="cell-value" [class.text-danger]="conf()!.availableSeats === 0">
+              {{ conf()!.availableSeats }} places restantes
             </span>
           </div>
         </div>
 
         <div class="action-row">
+          <div class="secondary-actions">
+            <button
+              class="btn-edit"
+              type="button"
+              (click)="openEditModal()"
+            >
+              ✏️ Modifier
+            </button>
+            <button
+              class="btn-delete"
+              type="button"
+              (click)="openDeleteModal()"
+            >
+              🗑️ Supprimer
+            </button>
+          </div>
+
           <button
             class="btn-register"
             type="button"
-            [disabled]="conf().availableSeats <= 0"
+            [disabled]="conf()!.availableSeats <= 0"
             (click)="onReserve()"
           >
-            Réserver ma place
+            {{ conf()!.availableSeats > 0 ? 'Réserver ma place' : 'Complet' }}
           </button>
         </div>
       </div>
     } @else {
       <div class="empty-state">
+        <div class="empty-icon">📂</div>
         <h3 class="empty-title">Conférence introuvable</h3>
         <p class="empty-desc">
-          Aucune conférence ne correspond à cet identifiant.
+          Aucune conférence ne correspond à cet identifiant ou le serveur json-server n'est pas joignable.
         </p>
         <a routerLink="/conferences" class="btn-primary-link">
           Retour à la liste des conférences
@@ -61,3 +104,141 @@
     }
   </div>
 </div>
+
+@if (showEditModal()) {
+  <div class="modal-backdrop" (click)="closeEditModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Modifier la conférence</h3>
+        <button class="modal-close" type="button" (click)="closeEditModal()">✕</button>
+      </div>
+
+      <form class="modal-form" [formGroup]="editForm" (ngSubmit)="saveEdit()">
+        <div class="form-group full-width">
+          <label for="editName" class="form-label">Titre de la conférence *</label>
+          <input
+            id="editName"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="editForm.get('name')?.invalid && editForm.get('name')?.touched"
+            formControlName="name"
+          />
+          @if (editForm.get('name')?.invalid && editForm.get('name')?.touched) {
+            <span class="field-error">Le titre est requis (min. 3 caractères).</span>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editCategory" class="form-label">Catégorie *</label>
+            <select
+              id="editCategory"
+              class="form-control"
+              formControlName="category"
+            >
+              @for (cat of categories; track cat) {
+                <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editDate" class="form-label">Date *</label>
+            <input
+              id="editDate"
+              type="date"
+              class="form-control"
+              [class.is-invalid]="editForm.get('date')?.invalid && editForm.get('date')?.touched"
+              formControlName="date"
+            />
+            @if (editForm.get('date')?.invalid && editForm.get('date')?.touched) {
+              <span class="field-error">La date est requise.</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editPlace" class="form-label">Lieu *</label>
+            <input
+              id="editPlace"
+              type="text"
+              class="form-control"
+              [class.is-invalid]="editForm.get('place')?.invalid && editForm.get('place')?.touched"
+              formControlName="place"
+            />
+            @if (editForm.get('place')?.invalid && editForm.get('place')?.touched) {
+              <span class="field-error">Le lieu est requis.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="editSeats" class="form-label">Places disponibles *</label>
+            <input
+              id="editSeats"
+              type="number"
+              min="0"
+              class="form-control"
+              [class.is-invalid]="editForm.get('availableSeats')?.invalid && editForm.get('availableSeats')?.touched"
+              formControlName="availableSeats"
+            />
+            @if (editForm.get('availableSeats')?.invalid && editForm.get('availableSeats')?.touched) {
+              <span class="field-error">Le nombre de places doit être positif.</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="editSpeaker" class="form-label">Conférencier *</label>
+          <input
+            id="editSpeaker"
+            type="text"
+            class="form-control"
+            [class.is-invalid]="editForm.get('speaker')?.invalid && editForm.get('speaker')?.touched"
+            formControlName="speaker"
+          />
+          @if (editForm.get('speaker')?.invalid && editForm.get('speaker')?.touched) {
+            <span class="field-error">Le conférencier est requis.</span>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancel" type="button" (click)="closeEditModal()">
+            Annuler
+          </button>
+          <button class="btn-submit" type="submit" [disabled]="editForm.invalid">
+            Enregistrer les modifications
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (showDeleteModal()) {
+  <div class="modal-backdrop" (click)="closeDeleteModal()">
+    <div class="modal-dialog modal-dialog-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title text-danger">⚠️ Confirmer la suppression</h3>
+        <button class="modal-close" type="button" (click)="closeDeleteModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p>
+          Êtes-vous sûr de vouloir supprimer définitivement la conférence
+          <strong>« {{ conf()?.name }} »</strong> ?
+        </p>
+        <p class="text-muted">Vous serez redirigé vers la liste des conférences.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" type="button" (click)="closeDeleteModal()">
+          Annuler
+        </button>
+        <button class="btn-danger-confirm" type="button" (click)="confirmDelete()">
+          Supprimer définitivement
+        </button>
+      </div>
+    </div>
+  </div>
+}
